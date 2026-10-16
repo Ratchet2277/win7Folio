@@ -1,0 +1,13 @@
+services:
+  portfolio:
+    build:
+      target: development
+    command: npm run dev -- --host 0.0.0.0
+    ports:
+      - "${PORTFOLIO_DEV_PORT:-5173}:5173"
+    volumes:
+      - .:/app
+      - portfolio_node_modules:/app/node_modules
+
+volumes:
+  portfolio_node_modules:

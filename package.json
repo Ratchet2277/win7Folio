@@ -5,6 +5,7 @@
   "author": "Amir Momenian <nainemom@gmail.com>",
   "private": true,
   "scripts": {
+    "test:documents": "node --test documents/server.test.mjs",
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",

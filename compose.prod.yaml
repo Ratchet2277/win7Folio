@@ -1,0 +1,16 @@
+services:
+  portfolio:
+    build:
+      target: production
+    ports:
+      - "${PORTFOLIO_PROD_PORT:-8081}:80"
+    restart: unless-stopped
+
+  doom-wasm:
+    restart: unless-stopped
+
+  collabora:
+    restart: unless-stopped
+
+  documents:
+    restart: unless-stopped

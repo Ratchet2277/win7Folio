@@ -10,7 +10,7 @@
 <script>
 import { rgba } from '@/styles/utils';
 import { props } from '@/utils/vue';
-import { fileObject } from '@/services/fs';
+import { fileObject, resolveFileByPath } from '@/services/fs';
 
 const parseFileData = (file) => {
   try {
@@ -25,7 +25,7 @@ export default {
     const parsedData = parseFileData(file);
     return {
       ...(parsedData.icon && {
-        icon: fileObject('icon.png', 'file', parsedData.icon),
+        icon: resolveFileByPath(parsedData.icon) || fileObject('icon.png', 'file', parsedData.icon),
       }),
       width: parsedData.width || 600,
       height: parsedData.height || 500,
@@ -36,7 +36,10 @@ export default {
   }),
   computed: {
     iframeSrc() {
-      return parseFileData(this.file).url;
+      const config = parseFileData(this.file);
+      return config.document
+        ? `/api/office/open?path=${encodeURIComponent(config.document)}`
+        : config.url;
     },
   },
   style({ className }) {
