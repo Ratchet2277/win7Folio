@@ -63,8 +63,12 @@ en dev, les ajouts et suppressions déclenchent un rechargement du bureau.
 
 Le raccourci CV utilise `CV.webapp` et pointe actuellement vers
 `src/C:/User/Document/CV V2.docx`. Ce dossier est également associé à Collabora
-et accessible depuis « Documents » dans le menu Démarrer. Pour modifier le CV,
-changez son champ `document` :
+et accessible depuis « Documents » dans le menu Démarrer.
+
+Le fichier DOCX est personnel et exclu du suivi Git. Après un clone, déposez-le
+localement dans ce dossier pour activer le raccourci CV.
+
+Pour modifier le CV, changez son champ `document` :
 
 ```json
 {
