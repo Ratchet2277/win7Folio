@@ -4,16 +4,24 @@
     @contextmenu.prevent
   >
     <WelcomePage v-if="!isWmStarted" />
-    <template v-else>
-      <Desktop />
-      <Taskbar />
-      <Window
-        v-for="win in windowsList"
-        :key="win.id"
-        :window="win"
-      />
-      <ContextMenu v-bind="contextMenu" />
-    </template>
+    <Transition
+      name="desktop-reveal"
+      @after-enter="playStartupSound"
+    >
+      <div
+        v-if="isWmStarted"
+        :class="$style.desktopSession"
+      >
+        <Desktop />
+        <Taskbar />
+        <Window
+          v-for="win in windowsList"
+          :key="win.id"
+          :window="win"
+        />
+        <ContextMenu v-bind="contextMenu" />
+      </div>
+    </Transition>
   </div>
 </template>
 
@@ -27,6 +35,8 @@ import ContextMenu from '@/components/ContextMenu.vue';
 import * as $wm from '@/services/wm';
 import { fitSize } from '@/styles/common';
 import { customLog } from '@/utils/log';
+import { resolveFileByPath } from '@/services/fs';
+import { playBackgroundSound } from '@/services/snd';
 
 export default {
   components: {
@@ -59,6 +69,11 @@ export default {
     return false;
   },
   methods: {
+    playStartupSound() {
+      playBackgroundSound(resolveFileByPath('C:/Windows/system/sounds/startup.mp3'), {
+        retryOnInteraction: true,
+      });
+    },
     openContextMenu(...args) {
       this.$refs.contextMenu.open(...args);
     },
@@ -68,6 +83,20 @@ export default {
       className('os', {
         position: 'fixed',
         ...fitSize,
+        background: '#000',
+      }),
+      className('desktopSession', {
+        position: 'absolute',
+        ...fitSize,
+        '&.desktop-reveal-enter-active': {
+          transition: 'opacity 800ms ease',
+        },
+        '&.desktop-reveal-enter-from': {
+          opacity: 0,
+        },
+        '&.desktop-reveal-enter-to': {
+          opacity: 1,
+        },
       }),
       custom('html, body', {
         fontFamily: 'sans-serif',
